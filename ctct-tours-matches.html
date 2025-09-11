@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CTCT Weekly Series Matches</title>
+
+<!-- ============================
+   BLOCK: CSS STYLES START
+============================ -->
+<style>
+/* BLOCK: GLOBAL BODY STYLES */
+body{font-family:Arial,sans-serif;margin:0;padding:0;background:#f9f9f9;color:#333;}
+
+/* BLOCK: HEADER STYLES */
+header{background:linear-gradient(90deg,#039591,#ffb703);color:white;text-align:center;padding:1rem;font-size:1.5rem;font-weight:bold;letter-spacing:1px;position:sticky;top:0;z-index:10;}
+
+
+/* BLOCK: TABLE CONTAINER STYLES */
+.table-container{overflow:auto;border-radius:5px;box-shadow:0px 4px 12px rgba(0,0,0,0.3);background:white;margin:1rem;max-height:calc(91vh - 200px);position:relative;
+    border: 2px solid #039591;
+;}
+
+/* BLOCK: TABLE STYLING */
+table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:900px;position:relative;}
+thead{background:#039591;color:white;position:sticky;top:0;z-index:8;}
+th,td{padding:10px 12px;text-align:center;white-space:nowrap;position:relative;}
+
+/* BLOCK: TABLE STYLING DTA AUTOFIT TO COLOMN */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9rem;
+  min-width: unset;       /* 👈 pehle 900px fix tha, hata diya */
+  table-layout: auto;     /* 👈 auto fit with data */
+  position: relative;
+}
+
+th, td {
+  padding: 8px 10px;      /* 👈 thoda chota padding */
+  text-align: center;
+  /* white-space: nowrap; 👈 ye line hata deni hai */
+  position: relative;
+  word-break: keep-all;   /* 👈 content ke hisab se fit ho */
+}
+
+
+/* BLOCK: TEAM NAME COLUMNS LEFT ALIGN */
+td:nth-child(3), th:nth-child(3),
+td:nth-child(9), th:nth-child(9) {
+  text-align: left;
+  padding-left: 10px;
+}
+
+/* BLOCK: ALTERNATE ROW COLORS + LIGHT 3D LOOK */
+tbody tr:nth-child(odd) td {
+  background: #e6f7ff;
+  box-shadow: inset 0px 1px 2px rgba(0,0,0,0.08);
+}
+tbody tr:nth-child(even) td {
+  background: #cceeff;
+  box-shadow: inset 0px 1px 2px rgba(0,0,0,0.08);
+}
+
+/* BLOCK: HIGHLIGHTED ROW */
+.highlighted td{background-color:#2ecc71 !important;font-weight:bold;}
+
+/* BLOCK: W/L COLORS */
+.win-cell { color: green; font-weight: bold; }
+.loss-cell { color: red; font-weight: bold; }
+
+/* BLOCK: LOADER STYLES */
+.loader-container{text-align:center;margin:50px 0;}
+.loader-bars{display:flex;justify-content:center;align-items:flex-end;height:80px;margin-bottom:15px;}
+.loader-bars span{width:8px;height:20px;margin:0 3px;background:#1abc9c;animation:grow 1s infinite;}
+.loader-bars span:nth-child(2){animation-delay:0.2s;background:#3498db;}
+.loader-bars span:nth-child(3){animation-delay:0.4s;background:#9b59b6;}
+.loader-bars span:nth-child(4){animation-delay:0.6s;background:#e74c3c;}
+@keyframes grow{0%,100%{height:20px;}50%{height:60px;}}
+.loading-text{font-size:18px;font-weight:bold;color:#444;font-family:Arial,sans-serif;}
+
+/* BLOCK: LIGHTNING + ZOOM ANIMATION */
+@keyframes lightningZoom{
+  0%{transform:scale(1);background-color:#2ecc71;}
+  20%{transform:scale(1.03);background-color:#ffffff;}
+  40%{transform:scale(1);background-color:#2ecc71;}
+  60%{transform:scale(1.02);background-color:#ffffff;}
+  80%{transform:scale(1);background-color:#2ecc71;}
+  100%{transform:scale(1);background-color:#2ecc71;}
+}
+.animate-lightning{animation: lightningZoom 0.6s ease-in-out;}
+
+/* BLOCK: MEDIA QUERIES */
+@media (max-width:600px){
+  header{font-size:1.2rem;padding:.8rem;}
+  th,td{padding:6px;font-size:.8rem;}
+}
+</style>
+<!-- ============================
+   BLOCK: CSS STYLES END
+============================ -->
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav" role="navigation" aria-label="Primary">
+  <a href="index.html" class="nav-btn">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-text">Home</span>
+  </a>
+  <a href="score.html" class="nav-btn">
+    <span class="nav-icon">📋</span>
+    <span class="nav-text">ScoreBrd</span>
+  </a>
+  <a href="live.html" class="nav-btn">
+    <span class="nav-icon">🔴</span>
+    <span class="nav-text">LiveBrd</span>
+  </a>
+  <a href="most.html" class="nav-btn">
+    <span class="nav-icon">🥇</span>
+    <span class="nav-text">MostRcrd</span>
+  </a>
+  <a href="summary.html" class="nav-btn">
+    <span class="nav-icon">🏆</span>
+    <span class="nav-text">Summary</span>
+  </a>
+</nav>
+<style>
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0; height: 70px;
+    background: linear-gradient(90deg, #039591, #83eae7);
+    display: flex; justify-content: space-around; align-items: center;
+    box-shadow: 0 -3px 10px rgba(0,0,0,0.3); z-index: 999; padding: 5px 0;
+  }
+  .nav-btn {
+    flex: 1; margin: 0 5px; text-align: center; color: white; font-size: 0.85rem;
+    text-decoration: none; display: flex; flex-direction: column; align-items: center;
+    background: linear-gradient(145deg, #04a39d, #028782);
+    border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 -2px 4px rgba(255,255,255,0.2);
+    padding: 6px 4px; transition: all 0.2s ease;
+  }
+  .nav-btn:hover {transform: translateY(-4px); box-shadow: 0 6px 10px rgba(0,0,0,0.4), inset 0 -2px 4px rgba(255,255,255,0.2);}
+  .nav-btn:active {
+    transform: translateY(2px);
+    background: linear-gradient(145deg, #ffb703, #e09a00);
+    color: #222; font-weight: bold; box-shadow: inset 0 3px 6px rgba(0,0,0,0.4);
+  }
+  .nav-icon {font-size: 1.5rem; margin-bottom: 2px;}
+  .nav-text {font-size: 0.75rem; font-weight: 600;}
+  body {padding-bottom: 80px;}
+</style>
+</head>
+<body>
+
+<!-- ============================
+   BLOCK: HEADER 
+============================ -->
+<header>CTCT Tours Overview</header>
+
+
+
+<!-- ============================
+   BLOCK: TABLE + LOADER
+============================ -->
+<div class="table-container">
+  <table id="rankingTable">
+    <thead>
+      <tr>
+        <th>No</th><th>Date</th><th>Team name</th><th>Run</th><th>Out</th><th>Ovrs</th><th>W/L</th><th>Vs</th>
+        <th>Team name</th><th>Runs</th><th>Out</th><th>Ovrs</th><th>W/L</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div id="loader" class="loader-container">
+    <div class="loader-bars"><span></span><span></span><span></span><span></span></div>
+    <div class="loading-text">Data Loading Please wait<span id="dots"></span></div>
+  </div>
+</div>
+
+<!-- ============================
+   BLOCK: JS SCRIPTS START
+============================ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script>
+// Loader dots animation
+let dots=document.getElementById("dots");let count=0;
+setInterval(()=>{count=(count+1)%6;if(dots)dots.textContent=".".repeat(count);},500);
+
+// CSV URL
+const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5j47A7REtFvOkz-VJVTwSRn42lhX7HYjBQu7ytPJoXpuxuhius5_rWJ5em19ryEck6W5n25lpzpyq/pub?gid=160661062&single=true&output=csv";
+
+// Range helper
+function parseRange(range) {
+    const [startCell, endCell] = range.split(":");
+    function colLetterToIndex(letter) {
+        let col = 0;
+        for (let i = 0; i < letter.length; i++) {
+            col *= 26;
+            col += letter.charCodeAt(i) - 65 + 1;
+        }
+        return col - 1;
+    }
+    const startCol = startCell.match(/[A-Z]+/i)[0].toUpperCase();
+    const startRow = parseInt(startCell.match(/\d+/)[0], 10);
+    const endCol = endCell.match(/[A-Z]+/i)[0].toUpperCase();
+    const endRow = parseInt(endCell.match(/\d+/)[0], 10);
+    return {
+        rowStart: startRow - 1,
+        rowEnd: endRow,
+        colStart: colLetterToIndex(startCol),
+        colEnd: colLetterToIndex(endCol) + 1
+    };
+}
+
+// Range
+const dataRange = "A8:M200";
+const { rowStart, rowEnd, colStart, colEnd } = parseRange(dataRange);
+
+// Load CSV
+function loadCSV() {
+    Papa.parse(csvUrl, {
+        download: true,
+        header: false,
+        complete: function(results) {
+            const rows = results.data.slice(rowStart, rowEnd).map(r => r.slice(colStart, colEnd));
+            const tbody = document.querySelector("#rankingTable tbody");
+            tbody.innerHTML = "";
+
+            let lastNoValue = 0;
+
+            rows.forEach(row => {
+                if(row[0]) lastNoValue = row[0]; // last filled value of No column
+
+                const tr = document.createElement("tr");
+                row.forEach((cell, idx) => {
+                    const td = document.createElement("td");
+                    td.textContent = cell;
+
+                    // Apply W/L colors
+                    if ((idx === 6 || idx === 12) && cell) {
+                        if(cell.trim() === "W") td.classList.add("win-cell");
+                        if(cell.trim() === "L") td.classList.add("loss-cell");
+                    }
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById("loader").style.display = "none";
+            attachRowClick();
+
+      
+        }
+    });
+}
+
+// Row click animation
+function attachRowClick() {
+    const rows=document.querySelectorAll("#rankingTable tbody tr");
+    let selectedRow=null;
+    rows.forEach(row=>{
+        row.addEventListener("click",function(){
+            if(selectedRow) selectedRow.classList.remove("highlighted");
+            selectedRow=null;
+            this.classList.add("highlighted");
+            selectedRow=this;
+            this.classList.remove("animate-lightning"); void this.offsetWidth; this.classList.add("animate-lightning");
+        });
+    });
+}
+
+loadCSV();
+</script>
+<!-- ============================
+   BLOCK: JS SCRIPTS END
+============================ -->
+
+
+</body>
+</html>

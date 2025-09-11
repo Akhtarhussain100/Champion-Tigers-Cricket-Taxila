@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CTCT Weekly Series Bowling Rank</title>
+
+<style>
+/* BODY */
+body{font-family:Arial,sans-serif;margin:0;padding:0;background:#f9f9f9;color:#333;padding-bottom:80px;}
+/* HEADER */
+header{background:linear-gradient(90deg,#039591,#ffb703);color:white;text-align:center;padding:1rem;font-size:1.5rem;font-weight:bold;letter-spacing:1px;position:sticky;top:0;z-index:10;}
+/* SEARCH BOX */
+.search-box{background:#f9f9f9;position:sticky;top:60px;z-index:9;padding:.5rem 0;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,0.05);}
+.search-box input{padding:10px;width:85%;max-width:400px;border:2px solid #039591;border-radius:8px;outline:none;font-size:1rem;}
+/* TABLE */
+.table-container{overflow:auto;border-radius:5px;box-shadow:0px 4px 12px rgba(0,0,0,0.3);background:white;margin:1rem;max-height:calc(100vh - 219px);position:relative;border:2px solid #039591;}
+table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:900px;}
+thead{background:#039591;color:white;position:sticky;top:0;z-index:8;}
+th,td{padding:10px 12px;text-align:center;white-space:nowrap;}
+
+
+/* BLOCK: TABLE STYLING DATA AUTOFIT TO COLMN */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9rem;
+  min-width: unset;       /* 👈 pehle 900px fix tha, hata diya */
+  table-layout: auto;     /* 👈 auto fit with data */
+  position: relative;
+}
+
+th, td {
+  padding: 8px 10px;      /* 👈 thoda chota padding */
+  text-align: center;
+  /* white-space: nowrap; 👈 ye line hata deni hai */
+  position: relative;
+  word-break: keep-all;   /* 👈 content ke hisab se fit ho */
+}
+
+
+/* Sticky Name Column */
+td:nth-child(3),th:nth-child(3){position:sticky;left:0;z-index:7;background:#039591;color:white;}
+tbody td:nth-child(3){color:black;background:inherit;}
+/* Alternate Rows */
+tbody tr:nth-child(odd) td{background:#e6f7ff;}
+tbody tr:nth-child(even) td{background:#cceeff;}
+/* Highlight + Animation */
+.highlighted td{background-color:#2ecc71 !important;font-weight:bold;}
+@keyframes lightningZoom{0%{transform:scale(1);background:#2ecc71;}20%{transform:scale(1.03);background:#fff;}40%{transform:scale(1);background:#2ecc71;}60%{transform:scale(1.02);background:#fff;}100%{transform:scale(1);background:#2ecc71;}}
+.animate-lightning{animation: lightningZoom 0.6s ease-in-out;}
+
+/* BLOCK: ALTERNATE ROW COLORS + LIGHT 3D LOOK */
+tbody tr:nth-child(odd) td {
+  background: #e6f7ff; /* halka sky blue */
+  box-shadow: inset 0px 1px 2px rgba(0,0,0,0.08);
+}
+
+tbody tr:nth-child(even) td {
+  background: #cceeff; /* thoda gehra shade */
+  box-shadow: inset 0px 1px 2px rgba(0,0,0,0.08);
+}
+
+/* BLOCK: LEFT ALIGN NAME COLUMN */
+td:nth-child(3), th:nth-child(3) {
+    text-align: left;
+    padding-left: 10px; /* thoda gap left side se */}
+
+/* Loader */
+.loader-container{text-align:center;margin:50px 0;}
+.loader-bars{display:flex;justify-content:center;align-items:flex-end;height:80px;margin-bottom:15px;}
+.loader-bars span{width:8px;height:20px;margin:0 3px;background:#1abc9c;animation:grow 1s infinite;}
+.loader-bars span:nth-child(2){animation-delay:0.2s;background:#3498db;}
+.loader-bars span:nth-child(3){animation-delay:0.4s;background:#9b59b6;}
+.loader-bars span:nth-child(4){animation-delay:0.6s;background:#e74c3c;}
+@keyframes grow{0%,100%{height:20px;}50%{height:60px;}}
+.loading-text{font-size:18px;font-weight:bold;color:#444;}
+/* Bottom Nav */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:linear-gradient(90deg,#039591,#83eae7);display:flex;justify-content:space-around;align-items:center;box-shadow:0 -3px 10px rgba(0,0,0,0.3);z-index:999;padding:5px 0;}
+.nav-btn{flex:1;margin:0 5px;text-align:center;color:white;font-size:.85rem;text-decoration:none;display:flex;flex-direction:column;align-items:center;background:linear-gradient(145deg,#04a39d,#028782);border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.3),inset 0 -2px 4px rgba(255,255,255,0.2);padding:6px 4px;transition:all 0.2s ease;}
+.nav-btn:hover{transform:translateY(-4px);box-shadow:0 6px 10px rgba(0,0,0,0.4),inset 0 -2px 4px rgba(255,255,255,0.2);}
+.nav-btn:active{transform:translateY(2px);background:linear-gradient(145deg,#ffb703,#e09a00);color:#222;font-weight:bold;box-shadow:inset 0 3px 6px rgba(0,0,0,0.4);}
+.nav-icon{font-size:1.5rem;margin-bottom:2px;}
+.nav-text{font-size:.75rem;font-weight:600;}
+@media(max-width:600px){header{font-size:1.2rem;padding:.8rem;}th,td{padding:6px;font-size:.8rem;}}
+</style>
+</head>
+<body>
+
+<header>CTCT Short League Bowling Rank</header>
+
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="Search by Name or ID...">
+</div>
+
+<div class="table-container">
+  <table id="rankingTable">
+    <thead>
+      <tr>
+        <th>Rank</th><th>ID</th><th>Name</th><th>Rating</th><th>Inning</th><th>Overs</th>
+        <th>Maiden</th><th>Wkts</th><th>Runs</th><th>WD</th><th>No</th><th>Dots</th>
+        <th>W/M</th><th>Econ</th><th>Avg</th><th>OMT</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div id="loader" class="loader-container">
+    <div class="loader-bars"><span></span><span></span><span></span><span></span></div>
+    <div class="loading-text">Data Loading Please wait<span id="dots"></span></div>
+  </div>
+</div>
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav" role="navigation" aria-label="Primary">
+  <a href="index.html" class="nav-btn">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-text">Home</span>
+  </a>
+  <a href="score.html" class="nav-btn">
+    <span class="nav-icon">📋</span>
+    <span class="nav-text">ScoreBrd</span>
+  </a>
+  <a href="live.html" class="nav-btn">
+    <span class="nav-icon">🔴</span>
+    <span class="nav-text">LiveBrd</span>
+  </a>
+  <a href="most.html" class="nav-btn">
+    <span class="nav-icon">🥇</span>
+    <span class="nav-text">MostRcrd</span>
+  </a>
+  <a href="summary.html" class="nav-btn">
+    <span class="nav-icon">🏆</span>
+    <span class="nav-text">Summary</span>
+  </a>
+</nav>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script>
+// Loader dots
+let dots=document.getElementById("dots"),count=0;
+setInterval(()=>{count=(count+1)%6;if(dots)dots.textContent=".".repeat(count);},500);
+
+// CSV URL (new GID)
+const csvUrl="https://docs.google.com/spreadsheets/d/e/2PACX-1vRHPdFltvc794FnxpH3xDLrrYlq-kJrjdeH4TZ4ygp5e3T75xRxL9MEQIx3fratcrPvTar40boA1nyh/pub?gid=1589924702&single=true&output=csv";
+
+// Range Helper
+function parseRange(range){
+  const [s,e]=range.split(":");
+  const colToIdx=l=>[...l].reduce((r,ch)=>r*26+(ch.charCodeAt(0)-64),0)-1;
+  const [sCol,sRow]=[s.match(/[A-Z]+/)[0],parseInt(s.match(/\d+/)[0])];
+  const [eCol,eRow]=[e.match(/[A-Z]+/)[0],parseInt(e.match(/\d+/)[0])];
+  return {rowStart:sRow-1,rowEnd:eRow,colStart:colToIdx(sCol),colEnd:colToIdx(eCol)+1};
+}
+const {rowStart,rowEnd,colStart,colEnd}=parseRange("A3:Q200");
+
+// Load CSV
+function loadCSV(){
+  Papa.parse(csvUrl,{
+    download:true,header:false,
+    complete:res=>{
+      const raw=res.data;
+      const rows=raw.slice(rowStart,rowEnd).map(r=>r.slice(colStart,colEnd)).filter(r=>r.some(c=>c.trim()!==""));
+      const tbody=document.querySelector("#rankingTable tbody");
+      tbody.innerHTML="";
+      rows.forEach(r=>{
+        const tr=document.createElement("tr");
+        r.forEach(c=>{
+          const td=document.createElement("td");td.textContent=c;tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      document.getElementById("loader").style.display="none";
+      attachRowClick();
+    }
+  });
+}
+
+// Search
+document.getElementById("searchInput").addEventListener("keyup",function(){
+  const filter=this.value.trim().toLowerCase();
+  document.querySelectorAll("#rankingTable tbody tr").forEach(tr=>{
+    const id=tr.querySelector("td:nth-child(2)")?.textContent.trim();
+    const rowTxt=tr.textContent.toLowerCase();
+    if(/^\d+$/.test(filter)){
+      tr.style.display=(id===filter)?"":"none";
+    }else{
+      tr.style.display=rowTxt.includes(filter)?"":"none";
+    }
+  });
+});
+
+// Row highlight
+function attachRowClick(){
+  let sel=null;
+  document.querySelectorAll("#rankingTable tbody tr").forEach(row=>{
+    row.addEventListener("click",function(){
+      if(sel) sel.classList.remove("highlighted");
+      sel=this;
+      sel.classList.add("highlighted");
+      sel.classList.remove("animate-lightning");void sel.offsetWidth;sel.classList.add("animate-lightning");
+    });
+  });
+}
+
+// Init
+loadCSV();
+</script>
+
+<script src="assets/js/index.js"></script>
+
+</body>
+</html>
