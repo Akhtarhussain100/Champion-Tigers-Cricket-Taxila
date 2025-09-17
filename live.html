@@ -3,83 +3,188 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CTCT Weekly Series Ranking</title>
-  <link rel="stylesheet" href="assets/css/footer.css">
-  <style>
-/* BLOCK: GLOBAL BODY STYLES */
-body {
-  font-family: 'Noto Nastaliq Urdu', 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-  background: #f7fbfb;
-  color: #333;
-  padding-bottom: 80px; /* space for nav bar */
+<title>CTCT Live Section</title>
+
+<style>
+:root{
+  --primary:#039591;
+  --aqua:#83eae7;
+  --accent:#ffb703;
+  --bg:#f9f9f9;
+  --card:#fff;
+  --shadow:0 10px 25px rgba(3,149,145,.18);
+  --radius:18px;
 }
 
-/* BLOCK: HEADER STYLES */
+/* ============================ BLOCK: GLOBAL STYLES ============================ */
+body {
+  font-family: Inter, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: #222;
+  padding-bottom: 90px; /* space for nav bar */
+  overflow-x: hidden;
+}
+
+/* ============================ BLOCK: HEADER ============================ */
 header {
-  background: linear-gradient(90deg,#039591,#ffb703);
+  background: linear-gradient(90deg, #039591, #ffb703);
   color: white;
   text-align: center;
   padding: 1rem;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: bold;
   letter-spacing: 1px;
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+  text-shadow: 0 2px 6px rgba(0,0,0,.25);
 }
 
-/* MAIN SECTION */
-.main-section {
-  min-height: calc(10vh - 150px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 50px;
+/* ============================ BLOCK: MAIN GRID ============================ */
+.main-area {
+  display: grid;
+  gap: 16px;
+  padding: 20px 20px; /* top/bottom space added */
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  position: relative;
+  z-index: 2;
+  margin-bottom: 30px; /* space above bottom nav */
 }
 
 .card {
-  background: #028782;   /* ✅ naya green bg */
-  border-radius: 20px;
-  padding: 40px 25px;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-  animation: fadeIn 1.2s ease;
-  color: #ffffff;        /* ✅ text white */
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 15px;
+  margin-right: 2rem;
+  margin-left: 2rem;
+  text-align: center;
+  transition: transform .25s ease, box-shadow .25s ease;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none; /* remove underline */
+  color: inherit;
 }
 
-.card h2 {
-  font-size: 1.6rem;
-  margin-bottom: 15px;
-  color: #ffffff;        /* ✅ heading bhi white */
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 32px rgba(3,149,145,.25);
 }
 
-.card p {
-  font-size: 1rem;
-  line-height: 1.8;
-  color: #ffffff;        /* ✅ paragraph bhi white */
+.card:after {
+  content:"";
+  position:absolute;
+  bottom:-20px;
+  right: -20px;
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  background: radial-gradient(circle at 30% 30%, var(--aqua), transparent 70%);
+  opacity:.5;
 }
 
-
-.icon {
-  font-size: 3rem;
+.card .icon {
+  font-size: 2.2rem;
   margin-bottom: 10px;
-  color: #ffb703;
-  animation: bounce 1.5s infinite;
+  position: relative;
+  z-index: 1; /* icon upar rahe */
 }
 
-@keyframes bounce {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+.card .icon::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 48px;
+  height: 48px;
+  opacity: 60%;
+  background:linear-gradient(135deg, #e0f7f6, #03ffd5); /* #92f8ff with 50% opacity */
+  border-radius: 8px; /* square rectangle with soft corners */
+  transform: translate(-50%, -50%); /* center me align */
+  z-index: -1; /* icon ke neeche hi dikhai de */
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+
+.card .icon {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+
+/* Main Word Styling */
+.card .title {
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: .3px;
+  background: var(--primary);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 12px;
+  display: inline-block;
+}
+
+/* Slogan Styling */
+.card .sub {
+  font-size: 13px;
+  color: #000;
+  margin-top: 8px;
+}
+.card:nth-child(1) {
+  background: linear-gradient(135deg, #e0f7f6, #ffb703);
+}
+.card:nth-child(2) {
+  background: linear-gradient(135deg, #fff3e0, #ffb703);
+}
+.card:nth-child(3) {
+  background: linear-gradient(135deg, #e3f2fd, #ffb703);
+}
+.card:nth-child(4) {
+  background: linear-gradient(135deg, #f3e5f5, #ffb703);
+}
+
+/* ============================ BLOCK: BACKGROUND CRICKET ANIMATION ============================ */
+.bg-decor {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ball, .bat {
+  position: absolute;
+  opacity: 0.18;
+  animation: float 12s infinite linear;
+}
+
+.ball {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ff3b3b, #8b0000);
+  box-shadow: inset -6px -6px 12px rgba(0,0,0,.4);
+}
+
+.bat {
+  width: 100px;
+  height: 20px;
+  background: linear-gradient(90deg,#deb887,#a0522d);
+  border-radius: 6px;
+  transform: rotate(-30deg);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.3);
+}
+
+.ball:nth-child(1){ top:10%; left:8%; animation-duration:14s;}
+.ball:nth-child(2){ top:40%; left:80%; animation-duration:18s;}
+.ball:nth-child(3){ top:70%; left:20%; animation-duration:16s;}
+.bat:nth-child(4){ top:20%; left:60%; animation-duration:22s;}
+.bat:nth-child(5){ top:75%; left:75%; animation-duration:20s;}
+
+@keyframes float {
+  0% { transform: translateY(0) rotate(0);}
+  50% { transform: translateY(-30px) rotate(15deg);}
+  100% { transform: translateY(0) rotate(0);}
 }
 
 /* Bottom nav */
@@ -142,64 +247,80 @@ body {
   padding-bottom: 80px;
 }
 
+
+
+/* ============================ BLINK RED DOT ============================ */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* sirf card ke icon blink kare */
+.icon {
+  animation: blink 1s infinite; /* 1 second me blink karega */
+}
+
+
+
 </style>
-
-
-
 </head>
 <body>
- 
-<!-- HEADER -->
-<header>Live Score Board 🔴</header>
 
-<!-- MAIN CONTENT -->
-<main class="main-section">
-  <div class="card">
-    <div class="icon">🚧</div>
-    <h3>لائیو سکور بورڈ زیر تعمیر ہے</h3>
-    <p>
-      یہ حصہ ابھی تیاری کے مراحل میں ہے۔  
-      ان شاء اللہ بہت جلد یہ مکمل ہو کر آپ کے سامنے پیش کیا جائے گا۔  
-      ہم اس پر کام کر رہے ہیں تاکہ آپ کو بہترین معلومات اور تجربہ فراہم کیا جا سکے۔  
-      براہ کرم کچھ دن انتظار کریں۔ 
+<!-- ============================ BLOCK: ANIMATED BACKGROUND ============================ -->
+<div class="bg-decor">
+  <div class="ball"></div>
+  <div class="ball"></div>
+  <div class="ball"></div>
+  <div class="bat"></div>
+  <div class="bat"></div>
+</div>
 
-      <br>😊</br>
-    </p>
-  </div>
-</main>
+<!-- ============================ BLOCK: HEADER ============================ -->
+<header>CTCT Live Section <span class="icon">🔴</span></header>
 
+<!-- ============================ BLOCK: MAIN AREA with Cards ============================ -->
+<main class="main-area">
+  <a class="card" href="ctct-series-live.html">
+    <div class="icon">🔴</div>
+    <div class="title">CTCT Series Live </div>
+    <div class="sub">Watch Live Scoring ball by ball.</div>
+  </a>
 
+  <a class="card" href="ctct weekly series bowlling rank.html">
+    <div class="icon">🔴</div>
+    <div class="title">CTCT Short League Live</div>
+    <div class="sub">Watch Live Scoring ball by ball.</div>
+  </a>
 
+  <a class="card" href="ctct-series-matches.html">
+    <div class="icon">🔴</div>
+    <div class="title">CTCT Tours Live</div>
+    <div class="sub">Watch Live Scoring ball by ball.</div>
+  </a>
 
-  
+<!-- ============================ BLOCK: BOTTOM NAVIGATION ============================ -->
 <nav class="bottom-nav" role="navigation" aria-label="Primary">
   <a href="index.html" class="nav-btn">
     <span class="nav-icon">🏠</span>
     <span class="nav-text">Home</span>
   </a>
-
   <a href="score.html" class="nav-btn">
     <span class="nav-icon">📋</span>
     <span class="nav-text">ScoreBrd</span>
   </a>
-
   <a href="live.html" class="nav-btn">
     <span class="nav-icon">🔴</span>
     <span class="nav-text">LiveBrd</span>
   </a>
-
   <a href="most.html" class="nav-btn">
     <span class="nav-icon">🥇</span>
     <span class="nav-text">MostRcrd</span>
   </a>
-
   <a href="summary.html" class="nav-btn">
     <span class="nav-icon">🏆</span>
     <span class="nav-text">Summary</span>
   </a>
 </nav>
-<link rel="stylesheet" href="assets/css/footer.css">
-<script src="assets/js/footer.js"></script>
 
 <script>
 
@@ -217,7 +338,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
 </script>
 
 

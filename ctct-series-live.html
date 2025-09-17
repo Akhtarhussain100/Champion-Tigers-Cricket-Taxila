@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Live Cricket Scoreboard</title>
+
+  <style>
+
+/* GLOBAL */
+:root{
+  --c1: #7fcfd0;
+  --c2: #00e2db;
+  --bg: #fff;
+  --muted: #9aa0a6;
+  --accent-deep: #b03a2e;
+  --table-odd: #e9f7f6;
+  --table-even: #f2f2f2;
+  --blue: #0b66d2;
+  --danger: #8b2b20;
+  --shadow: 0 0 6px rgba(0,0,0,0.4);
+  --radius: 7px;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+.page{
+  background: linear-gradient(180deg, rgba(127,207,208,0.06), rgba(1,151,147,0.02));
+  padding: 0px;
+  min-height: auto;
+  box-sizing: border-box;
+}
+
+.block{
+  margin-bottom: 4px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: white;
+  border: 1px solid #019793;
+}
+
+/* HEADER */
+.header{
+  background: #019793;
+  color: #fff;
+  padding: 6px 12px;
+  text-align: center;
+  border-radius: 4px;
+  box-shadow: none;
+  
+  
+}
+.match-title {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  line-height: 1;
+}
+
+/* TEAM TITLES */
+.team-title{
+  background:#019793;
+  color: #fff;
+  font-weight: 800;
+  text-align: center;
+  padding: 1px 6px;
+  font-size: 12px;
+}
+.team-title-blue{ background:#019793; }
+
+/* TABLE */
+.table-wrapper{ padding: 0; }
+.score-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.score-table thead th {
+  background: var(--c2);
+  color: #000;
+  font-weight: 700;
+  padding: 4px 6px;
+  text-align: center;
+  font-size: 11px;
+  position: sticky;
+  top: 0;
+}
+.score-table tbody td {
+  padding: 2px 6px;
+  height: 10px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+}
+.score-table thead th:nth-child(2) { width: 100px; text-align: left; }
+.score-table tbody td:nth-child(2) { text-align: left; }
+.score-table tbody tr:nth-child(odd){ background: var(--table-odd); }
+.score-table tbody tr:nth-child(even){ background: var(--table-even); }
+
+/* SUMMARY GRID */
+.summary-grid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+  padding: 5px;
+}
+
+/* NEW SCORE ROW */
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  align-items: stretch; /* same height for all */
+}
+
+/* LEFT big card */
+.main-table-card {
+  flex: 0 0 65%; /* width */
+  margin-left: 3px;
+  background: linear-gradient(90deg,#0b66d2,#5caeff); /* light 3D gradient */
+  border-radius: 10px;
+  padding: 6px; /* sirf 1px gap content se */
+  display: flex; /* table ko full height dene ke liye */
+  align-items: center;
+
+  /* 🔹 permanent 3D shadow */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+              0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* mini score table */
+.mini-score-table {
+  width: auto;                /* 🔹 data ke hisaab se width */
+  table-layout: auto;         /* 🔹 auto-fit to data */
+  border-collapse: collapse;
+  max-width: 100%;            /* optional: responsive */
+}
+
+.mini-score-table td.name {
+  text-align: left;
+  color: #ffffff;
+  font-weight: 500;
+  padding-right: 10px;
+  font-size: 14px;
+}
+
+.mini-score-table td.runs {
+  text-align: right;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 16px;
+  padding-right: 3px;
+}
+
+.mini-score-table td.balls {
+  text-align: right;
+  color: rgb(231, 231, 231);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+/* RIGHT side small cards */
+.side-cards {
+  flex: 2 0 15%;
+  margin-right: 2px;
+  display: flex ;
+  flex-direction: column;
+  gap: 5px; /* thoda kam gap */
+}
+
+.side-card {
+  flex: 1;
+  background: linear-gradient(90deg,#0367e2,#037df8); /* light gradient */
+  color: #f2f2f2;
+  border-radius: 7px;
+  padding: 1px; /* sirf 1px gap text se */
+  
+  text-align: center;
+  font-weight: 700;
+  font-size: 12px;
+
+
+
+  
+  /* same vertical centering */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 🔹 permanent 3D shadow */
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1),
+              0 6px 15px rgba(0, 0, 0, 0.07);
+}
+
+
+/* No ball free hit par bg yellow hojai */
+
+.side-card {
+  flex: 1;
+  background: linear-gradient(90deg,#0367e2,#037df8); /* light gradient */
+  color: #f2f2f2;
+  border-radius: 7px;
+  padding: 1px; /* sirf 1px gap text se */
+  text-align: center;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* jab .highlight-yellow class lagi ho to color change ho */
+.side-card.highlight-yellow {
+  background: yellow;
+  color: black;
+}
+
+
+/* SECOND ROW BLOCK custom spacing */
+.secondary-row {
+  margin-left: 6px;       /* thoda andr se start (batter card se aage) */
+  margin-right: 6px;      /* right se bhi thoda pehle khatam ho */
+}
+
+/* Left big summary card */
+.main-summary-card {
+  flex: 0 0 60%;
+  background: linear-gradient(90deg,#004c99,#0066cc);
+  border-radius: 10px;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.15),
+              0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* FULL WIDTH CARD */
+.summary-full-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  background: linear-gradient(90deg,#019793,#9debff);
+  border-radius: 8px;
+  margin: 0 3px; /* 🔹 dono side 3px margin */
+  padding: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.15),
+              0 8px 20px rgba(0,0,0,0.1);
+  color: #fff;
+}
+
+/* LEFT INFO */
+.left-info {
+  flex: 1; /* adha screen tak stretch */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 5px;
+}
+.big-score {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.big-overs {
+  font-size: 15px;
+  font-weight: 600;
+  opacity: 0.95;
+  margin-top: 4px;
+}
+
+/* RIGHT SIDE SMALL CARDS INSIDE */
+.right-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 0 0 40%; /* 🔹 right side fixed width */
+  padding-right: 3px; /* right edge se 3px gap */
+}
+
+.mini-card {
+  flex: 1;
+  background: linear-gradient(90deg,#50fff9,#50fff9);
+  color: #000000;
+  border-radius: 6px;
+  padding: 4px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 3D shadow look */
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15),
+              0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* BOWLER CARD */
+.bowler-card {
+  display: flex;
+  margin-left: 3px;
+  margin-right: 3px;
+  justify-content: space-between;
+  align-items: center;
+
+  /* text ko edge ke qareeb laya */
+  padding: 2px 3px;
+
+  background: linear-gradient(90deg,#0b66d2,#1e90ff);
+  color: #fff;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* left part */
+.bowler-left {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* right part mini-box */
+.bowler-right {
+  /* right side chhota white box */
+  background: #fff;
+  color: #0b66d2;
+  border-radius: 4px;
+
+  padding: 2px 6px;
+  margin: 1px;           /* bowler-card ke andar 1px gap */
+  font-size: 10px;
+  font-weight: 700;
+
+  display: inline-flex;  /* label ek hi line me rahe */
+  align-items: center;
+}
+
+.econ-label {
+  margin: 0;             /* koi extra margin nahi */
+}
+
+/* Card */
+.extras-block {
+  padding: 6px;
+  background: white;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+   /* so we can absolutely position live-box */
+}
+
+/* Rows */
+.extras-row,
+.partnership-row,
+.this-over-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Label */
+.label {
+  font-weight: 800;
+  font-size: 12px;
+  color: #00817d;
+  min-width: 70px;
+}
+
+/* Extra boxes */
+.extras-box {
+  background: #e0e0e0;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 1px 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Partnership box */
+.partnership-box {
+  background: linear-gradient(90deg,#0b66d2,#388ce0);
+  color: #fff;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* This Over box */
+.over-box {
+  background: #f0f0f0;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 1px 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.last-over-box {
+  background: #ae00ff; /* green */
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 1px 6px;   /* autofit to data */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  display: inline-block;
+  white-space: nowrap;
+}
+
+
+/* Live box */
+.live-box {
+  position: absolute; /* chipka diya right edge par */
+  top: 6px;
+  right: 3px; /* 3px distance from right edge */
+
+  text-align: center;
+  border-radius: 18px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+   padding: 2px 8px;   /* 👈 isko 3px ya 4px kar do */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* blink animation */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* red + blink when LIVE */
+.live-box.live {
+  background: #ff1a1a;
+  animation: blink 1s infinite;
+}
+
+/* green + no animation when other text */
+.live-box.not-live {
+  background: #4caf50;
+  animation: none;
+}
+
+
+
+
+
+/* FOOTER */
+.footer{ padding:8px; 
+  background: #d6fffe;
+  text-align:center; 
+  font-size:13px; 
+  color:var(--muted); }
+
+
+
+
+
+
+  /* sab cell aur boxes me original spaces preserve karo */
+#batting-rows td,
+#bowling-rows td,
+#match-title,
+#batting-team-name,
+#bowling-team-name,
+.big-score,
+.big-overs,
+.mini-card,
+#runs-need,
+#balls-left,
+#bowler-name,
+.econ-label,
+.extras-box,
+.partnership-box,
+.over-box,
+.last-over-box,
+#live-box {
+  white-space: pre-wrap;   /* preserve multiple spaces + wrap allowed */
+}
+
+
+  </style>
+
+</head>
+<body>
+  <!-- BLOCK: PAGE WRAPPER -->
+  <div id="page" class="page">
+
+    <!-- HEADER -->
+    <header id="header" class="block header">
+      <h1 id="match-title" class="match-title">Match heading</h1>
+    </header>
+
+    <!-- TEAM 1 BATTERS -->
+    <section class="block team-block" id="batting-block">
+      <div class="team-title" id="batting-team-name">Bater team name</div>
+      <div class="table-wrapper">
+        <table class="score-table" id="batting-table" aria-label="Batting">
+          <thead>
+            <tr>
+              <th>ID</th><th>Name</th><th>Sts</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>Dot</th><th>SR</th>
+            </tr>
+          </thead>
+          <tbody id="batting-rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TEAM 2 BOWLERS -->
+    <section class="block team-block" id="bowling-block">
+      <div class="team-title team-title-blue" id="bowling-team-name">Bowler team name</div>
+      <div class="table-wrapper">
+        <table class="score-table bowling" id="bowling-table" aria-label="Bowling">
+          <thead>
+            <tr>
+              <th>ID</th><th>Name</th><th>sts</th><th>O</th><th>M</th><th>W</th><th>R</th><th>WD</th><th>NB</th><th>Dot</th><th>Eco</th>
+            </tr>
+          </thead>
+          <tbody id="bowling-rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- LIVE SUMMARY -->
+    <section id="live-summary" class="block summary-grid">
+     
+      <!-- NEW FULL WIDTH BIG CARD WITH SMALL CARDS INSIDE -->
+      <div class="summary-full-card">
+        <!-- left info -->
+        <div class="left-info">
+          <div class="big-score">Main score</div>
+          <div class="big-overs">Over bowld</div>
+        </div>
+        <!-- right small cards -->
+        <div class="right-cards">
+          <div class="mini-card">Current RR: 12.9</div>
+          <div class="mini-card">Required RR: 13.8</div>
+        </div>
+      </div>
+
+      <!-- NEW SCORE ROW (BATTER) -->
+      <div class="score-row">
+        <!-- Left big card -->
+        <div class="main-table-card">
+          <table class="mini-score-table">
+            <tbody>
+              <tr>
+                <td class="name" id="t-b1-name">bater 1</td>
+                <td class="runs" id="t-b1-runs">bater 1 run</td>
+                <td class="balls" id="t-b1-balls">bater 1 ball</td>
+              </tr>
+              <tr>
+                <td class="name" id="t-b2-name">bater 2</td>
+                <td class="runs" id="t-b2-runs">bater 2 run</td>
+                <td class="balls" id="t-b2-balls">bater 2 ball</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Right side small cards -->
+        <div class="side-cards">
+          <div class="side-card need" id="runs-need">Run Need</div>
+          <div class="side-card balls" id="balls-left">Ball Left</div>
+        </div>
+      </div>
+
+      <!-- BOWLER CARD -->
+      <div class="bowler-card" id="bowler-card">
+        <div class="bowler-left">
+          <div class="bowler-name" id="bowler-name">Bowler line</div>
+        </div>
+        <div class="bowler-right">
+          <div class="econ-label">Economy</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXTRAS -->
+    <section id="extras-section" class="block extras-block">
+      <!-- Extra Row -->
+      <div class="extras-row">
+        <div class="label">Extra:</div>
+        <div class="extras-box">total extra</div>
+        <div class="extras-box">WD</div>
+        <div class="extras-box">No</div>
+        <!-- live-box ab yahan hai -->
+    <div class="live-box" id="live-box">Live</div>
+      </div>
+
+      <!-- Partnership Row -->
+      <div class="partnership-row">
+        <div class="label">Partnership:</div>
+        <div class="partnership-box">Partners</div>
+      </div>
+
+      <div class="this-over-row">
+        <div class="label">This Over:</div>
+        <div class="over-box">balls line</div>
+        <div class="last-over-box">Last over</div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="block footer">
+      <small><i>Designed By Akhtar Hussain (Web & App Developer) # 0320-9717126</i></small>
+    </footer>
+  </div>
+<script>
+
+/* ======== CONFIG ======== */
+const API_KEY = "AIzaSyASd4azrGTc-G-Svb0FY4B0YBJmR79Rcw8";
+const SHEET_ID = "1ETGZM74V4z1usM2Cq4ykn-QHAtG_D2G1XFf8BeU4gO0";
+const SHEET_NAME = "Live Scoreboard";
+const POLL_INTERVAL = 2000; // 2 sec refresh
+
+// DOM cache
+const matchTitle = document.getElementById("match-title");
+const battingTeamName = document.getElementById("batting-team-name");
+const bowlingTeamName = document.getElementById("bowling-team-name");
+const battingRows = document.getElementById("batting-rows");
+const bowlingRows = document.getElementById("bowling-rows");
+
+const mainScore = document.querySelector(".big-score");
+const overBowld = document.querySelector(".big-overs");
+const miniCards = document.querySelectorAll(".mini-card");
+const currentRREl = miniCards[0] || null;
+const requiredRREl = miniCards[1] || null;
+
+const b1Name = document.getElementById("t-b1-name");
+const b1Runs = document.getElementById("t-b1-runs");
+const b1Balls = document.getElementById("t-b1-balls");
+const b2Name = document.getElementById("t-b2-name");
+const b2Runs = document.getElementById("t-b2-runs");
+const b2Balls = document.getElementById("t-b2-balls");
+
+const runsNeed = document.getElementById("runs-need");
+const ballsLeft = document.getElementById("balls-left");
+
+const bowlerName = document.getElementById("bowler-name");
+const econLabel = document.querySelector(".econ-label");
+
+const extrasBoxes = document.querySelectorAll(".extras-box");
+const liveBox = document.getElementById("live-box");
+const partnershipBox = document.querySelector(".partnership-box");
+const overBox = document.querySelector(".over-box");
+const lastOverBox = document.querySelector(".last-over-box");
+
+// create fixed empty rows once
+function initTables() {
+  battingRows.innerHTML = "";
+  for (let i = 0; i < 11; i++) {
+    const tr = document.createElement("tr");
+    for (let c = 0; c < 9; c++) {
+      const td = document.createElement("td");
+      tr.appendChild(td);
+    }
+    battingRows.appendChild(tr);
+  }
+
+  bowlingRows.innerHTML = "";
+  for (let i = 0; i < 8; i++) {
+    const tr = document.createElement("tr");
+    for (let c = 0; c < 11; c++) {
+      const td = document.createElement("td");
+      tr.appendChild(td);
+    }
+    bowlingRows.appendChild(tr);
+  }
+}
+initTables();
+
+const RANGES = [
+  "B2","D4",
+  "B7:C17","H7:O17",   // batting split
+  "D19",
+  "B22:C29","G22:O29", // bowling split
+  "I32","I33","J35","J36","L32","L33",
+  "B32","G32","H32","B33","G33","H33","B35","H35","B38","D38","F38","E39","E40","N31","B31"
+];
+
+function buildBatchUrl() {
+  const params = RANGES.map(r => "ranges=" + encodeURIComponent(`${SHEET_NAME}!${r}`)).join("&");
+  return `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values:batchGet?${params}&key=${API_KEY}`;
+}
+
+let lastGoodData = null;
+let isFetching = false;
+
+async function update() {
+  if (isFetching) return; // prevent overlap
+  isFetching = true;
+  try {
+    const url = buildBatchUrl();
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const json = await res.json();
+
+    const data = {};
+    const ranges = json.valueRanges || [];
+    ranges.forEach(vr => {
+      const r = (vr.range || "").split("!")[1] || "";
+      if (!r) return;
+      if (vr.values && vr.values.length === 1 && vr.values[0].length === 1) {
+        data[r] = vr.values[0][0];
+      } else {
+        data[r] = vr.values || [];
+      }
+    });
+
+    // consider success if at least one range has data
+    const hasAny = Object.values(data).some(v => Array.isArray(v) ? v.length > 0 : (v !== null && v !== undefined && String(v).trim() !== ""));
+
+    if (hasAny) {
+      lastGoodData = data;
+      render(data);
+    } else if (lastGoodData) {
+      render(lastGoodData);
+    }
+
+  } catch (err) {
+    console.warn("fetch/update error:", err);
+    if (lastGoodData) render(lastGoodData);
+  } finally {
+    isFetching = false;
+  }
+}
+
+function render(data) {
+  // small safety: if element missing, skip silently
+  try {
+    matchTitle.textContent = data["B2"] || matchTitle.textContent || "";
+    battingTeamName.textContent = data["D4"] || battingTeamName.textContent || "";
+    bowlingTeamName.textContent = data["D19"] || bowlingTeamName.textContent || "";
+
+   // batting table
+const batIdName = data["B7:C17"] || [];
+const batStats  = data["H7:O17"] || [];
+[...battingRows.children].forEach((tr, i) => {
+  const rowLeft  = batIdName[i] || [];
+  const rowRight = batStats[i]  || [];
+  const finalRow = [...rowLeft, ...rowRight]; // merge dono ka
+  for (let c = 0; c < tr.children.length; c++) {
+    tr.children[c].textContent = finalRow[c] || "";
+  }
+});
+
+// bowling table
+const bowlIdName = data["B22:C29"] || [];
+const bowlStats  = data["G22:O29"] || [];
+[...bowlingRows.children].forEach((tr, i) => {
+  const rowLeft  = bowlIdName[i] || [];
+  const rowRight = bowlStats[i]  || [];
+  const finalRow = [...rowLeft, ...rowRight];
+  for (let c = 0; c < tr.children.length; c++) {
+    tr.children[c].textContent = finalRow[c] || "";
+  }
+});
+
+
+    // score + overs
+    if (data["I32"] !== undefined) mainScore.textContent = data["I32"];
+    if (data["I33"] !== undefined) overBowld.textContent = data["I33"];
+
+    if (currentRREl) currentRREl.textContent = (data["J35"] || "");
+    if (requiredRREl) requiredRREl.textContent = (data["J36"] || "");
+
+    // batters
+    if (b1Name) b1Name.textContent = data["B32"] || "";
+    if (b1Runs) b1Runs.textContent = data["G32"] || "";
+    if (b1Balls) b1Balls.textContent = data["H32"] || "";
+
+    if (b2Name) b2Name.textContent = data["B33"] || "";
+    if (b2Runs) b2Runs.textContent = data["G33"] || "";
+    if (b2Balls) b2Balls.textContent = data["H33"] || "";
+
+    // bowler
+    if (bowlerName) bowlerName.textContent = data["B35"] || "";
+    if (econLabel) econLabel.textContent = (data["H35"] || "");
+
+    // extras
+    if (extrasBoxes && extrasBoxes.length >= 3) {
+      extrasBoxes[0].textContent = data["B38"] || "";
+      extrasBoxes[1].textContent = data["D38"] || "";
+      extrasBoxes[2].textContent = data["F38"] || "";
+    }
+
+    if (partnershipBox) partnershipBox.textContent = data["E39"] || "";
+    if (overBox) overBox.textContent = data["E40"] || "";
+    if (lastOverBox) lastOverBox.textContent = data["N31"] || "";
+
+    // optional: runs need / balls left (if sheet has L32/L33)
+    if (runsNeed) runsNeed.textContent = data["L32"] || runsNeed.textContent || "";
+    if (ballsLeft) ballsLeft.textContent = data["L33"] || ballsLeft.textContent || "";
+
+
+
+    // No ball free hit color bg yellow:
+document.querySelectorAll('.side-card').forEach(el => {
+  const txt = el.textContent.trim().toLowerCase();
+  if (txt === 'no ball' || txt === 'free hit') {
+    el.classList.add('highlight-yellow');
+  } else {
+    el.classList.remove('highlight-yellow');
+  }
+});
+
+
+if (liveBox) {
+  liveBox.textContent = data["B31"] || liveBox.textContent || "";
+  
+  // optional: class switch if you want blinking
+  const txt = liveBox.textContent.trim().toLowerCase();
+  liveBox.classList.remove("live","not-live");
+  if (txt === "live") {
+    liveBox.classList.add("live");
+  } else {
+    liveBox.classList.add("not-live");
+  }
+}
+
+
+  } catch (err) {
+    console.error("render error:", err);
+  }
+}
+
+// start
+update();
+setInterval(update, POLL_INTERVAL);
+
+
+
+// 🔹 user jab table select kare aur copy  tu | | ke bech data ajai
+document.addEventListener('copy', e => {
+  const sel = window.getSelection();
+  const text = sel.toString();
+
+  // yahan aap apna conversion logic lagao
+  // jaise tabs ko pipes se replace kar do:
+  const converted = text
+    .split(/\t/g)          // tab se split
+    .join(' | ');          // pipe se join
+
+  e.clipboardData.setData('text/plain', converted);
+  e.preventDefault(); // default copy cancel
+});
+
+
+</script>
+
+</body>
+</html>
