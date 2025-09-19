@@ -3,23 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CTCT Weekly Series Ranking</title>
-  <link rel="stylesheet" href="assets/css/footer.css">
-  <style>
-/* BLOCK: GLOBAL BODY STYLES */
+<title>CTCT Fund Management</title>
+<style>
+/* GLOBAL */
 body {
-  font-family: 'Noto Nastaliq Urdu', 'Arial', sans-serif;
+  font-family: 'Arial', sans-serif;
   margin: 0;
-  padding: 0;
   background: #f7fbfb;
   color: #333;
-  padding-bottom: 80px; /* space for nav bar */
+  padding-bottom: 100px;
 }
-
-/* BLOCK: HEADER STYLES */
 header {
   background: linear-gradient(90deg,#039591,#ffb703);
-  color: white;
+  color: #fff;
   text-align: center;
   padding: 1rem;
   font-size: 1.4rem;
@@ -31,56 +27,125 @@ header {
   box-shadow: 0 3px 10px rgba(0,0,0,0.25);
 }
 
-/* MAIN SECTION */
-.main-section {
-  min-height: calc(10vh - 150px);
+/* === TOP CARDS === */
+.top-cards {
+  display: flex;
+  gap: 12px;
+  padding: 15px;
+  flex-wrap: wrap;
+}
+.top-card {
+  flex: 1 1 30%;
+  background: #ffffff;
+  border: #039591 1px solid;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 10px;
+  text-align: center;
+}
+.top-card h3 {
+  margin: 0 0 5px;
+  font-size: 1rem;
+  color: #039591;
+}
+.top-card p {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+/* === BUTTONS === */
+.buttons {
   display: flex;
   justify-content: center;
-  align-items: center;
+  gap: 15px;
+  margin: 10px 0;
+}
+.toggle-btn {
+  padding: 10px 15px;
+  border: none;
+  background: linear-gradient(145deg, #04a39d, #028782);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 10px;
+  box-shadow: inset -2px -2px 4px rgba(255,255,255,0.2), inset 2px 2px 6px rgba(0,0,0,0.3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.toggle-btn:hover {
+  transform: translateY(-2px);
+}
+.toggle-btn.active {
+  background: linear-gradient(145deg, #ffb703, #e09a00);
+  color: #222;
+  box-shadow: inset 3px 3px 6px rgba(0,0,0,0.4), inset -2px -2px 4px rgba(255,255,255,0.2);
+}
+
+/* === TABLE WRAPPER === */
+.table-wrapper {
+  display: none;
+  margin: 15px;
+  border: 1px solid #039591;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: calc(100% - 30px);
+}
+
+/* === TABLE BASE === */
+.table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+/* === TABLE HEADER === */
+.table-wrapper thead th {
+  background: #039591;
+  color: #fff;
+  text-align: left;
+  padding: 6px 8px;
+  font-weight: 600;
+}
+
+/* === TABLE ROWS === */
+.table-wrapper tbody td {
+  padding: 4px 8px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+.table-wrapper tbody tr:nth-child(odd) {background-color: #f2f6fc;}
+.table-wrapper tbody tr:nth-child(even) {background-color: #fafafa;}
+.table-wrapper tbody tr:last-child td {border-bottom: none;}
+
+/* === FIRST COLUMN (Name) auto-fit left aligned === */
+.table-wrapper tbody td:first-child {
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* === DESCRIPTION COLUMN fixed width === */
+.table-wrapper td:nth-child(2) {
+  max-width: 250px;
+  width: 250px;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+/* by default sabko center align */
+#tableFunding th,
+#tableFunding td {
   text-align: center;
-  padding: 50px;
 }
 
-.card {
-  background: #028782;   /* ✅ naya green bg */
-  border-radius: 20px;
-  padding: 40px 25px;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-  animation: fadeIn 1.2s ease;
-  color: #ffffff;        /* ✅ text white */
-}
-
-.card h2 {
-  font-size: 1.6rem;
-  margin-bottom: 15px;
-  color: #ffffff;        /* ✅ heading bhi white */
-}
-
-.card p {
-  font-size: 1rem;
-  line-height: 1.8;
-  color: #ffffff;        /* ✅ paragraph bhi white */
+/* pehle column (Name) ko left align */
+#tableFunding th:first-child,
+#tableFunding td:first-child {
+  text-align: left;
 }
 
 
-.icon {
-  font-size: 3rem;
-  margin-bottom: 10px;
-  color: #ffb703;
-  animation: bounce 1.5s infinite;
-}
-
-@keyframes bounce {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
 
 /* Bottom nav */
 .bottom-nav {
@@ -97,7 +162,6 @@ header {
   z-index: 999;
   padding: 5px 0;
 }
-
 .nav-btn {
   flex: 1;
   margin: 0 5px;
@@ -114,12 +178,10 @@ header {
   padding: 6px 4px;
   transition: all 0.2s ease;
 }
-
 .nav-btn:hover {
   transform: translateY(-4px);
   box-shadow: 0 6px 10px rgba(0,0,0,0.4), inset 0 -2px 4px rgba(255,255,255,0.2);
 }
-
 .nav-btn.active {
   background: linear-gradient(145deg, #ffb703, #e09a00);
   color: #222;
@@ -127,99 +189,268 @@ header {
   transform: translateY(2px);
   box-shadow: inset 0 3px 6px rgba(0,0,0,0.5);
 }
+.nav-icon {font-size: 1.5rem;margin-bottom: 2px;}
+.nav-text {font-size: 0.75rem;font-weight: 600;}
 
-.nav-icon {
-  font-size: 1.5rem;
-  margin-bottom: 2px;
+/* === LOADER OVERLAY === */
+#loaderOverlay {
+  position: fixed;
+  top: 0;left: 0;width: 100%;height: 100%;
+  background: rgba(255,255,255,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
 }
-
-.nav-text {
-  font-size: 0.75rem;
-  font-weight: 600;
+.loader-box {
+  text-align: center;
+  background: #ffffff;
+  padding: 20px 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
-
-body {
-  padding-bottom: 80px;
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #4caf50;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 10px auto;
+  animation: spin 1s linear infinite;
 }
-
+@keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+.loader-box p {font-size: 16px;font-weight: 600;color: #333;}
 </style>
-
-
-
 </head>
 <body>
- 
-<!-- HEADER -->
-<header> CTCT Fund Management</header>
+<header>CTCT Fund Management</header>
 
-<!-- MAIN CONTENT -->
-<main class="main-section">
-  <div class="card">
-    <div class="icon">🚧</div>
-    <h3>فنڈ منیجمنٹ زیر تعمیر ہے</h3>
-    <p>
-      یہ حصہ ابھی تیاری کے مراحل میں ہے۔  
-      ان شاء اللہ بہت جلد یہ مکمل ہو کر آپ کے سامنے پیش کیا جائے گا۔  
-      ہم اس پر کام کر رہے ہیں تاکہ آپ کو بہترین معلومات اور تجربہ فراہم کیا جا سکے۔  
-      براہ کرم کچھ دن انتظار کریں۔ 
-
-      <br>😊</br>
-    </p>
+<div class="top-cards">
+  <div class="top-card">
+    <h3>Total Fund</h3>
+    <p id="totalFund">-</p>
   </div>
-</main>
+  <div class="top-card">
+    <h3>Total Spend</h3>
+    <p id="totalSpend">-</p>
+  </div>
+  <div class="top-card">
+    <h3>Available Account Balance</h3>
+    <p id="accountBalance">-</p>
+  </div>
+</div>
 
+<div class="buttons">
+  <button class="toggle-btn" id="btnFunding">Funding Details</button>
+  <button class="toggle-btn" id="btnSpending">Spending Details</button>
+</div>
 
+<div id="tableFunding" class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>PKR</th>
+        <th>Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
 
+<div id="tableSpending" class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
 
-  
-<nav class="bottom-nav" role="navigation" aria-label="Primary">
+<nav class="bottom-nav">
   <a href="index.html" class="nav-btn">
-    <span class="nav-icon">🏠</span>
-    <span class="nav-text">Home</span>
+    <span class="nav-icon">🏠</span><span class="nav-text">Home</span>
   </a>
-
   <a href="score.html" class="nav-btn">
-    <span class="nav-icon">📋</span>
-    <span class="nav-text">ScoreBrd</span>
+    <span class="nav-icon">📋</span><span class="nav-text">ScoreBrd</span>
   </a>
-
   <a href="live.html" class="nav-btn">
-    <span class="nav-icon">🔴</span>
-    <span class="nav-text">LiveBrd</span>
+    <span class="nav-icon">🔴</span><span class="nav-text">LiveBrd</span>
   </a>
-
   <a href="most.html" class="nav-btn">
-    <span class="nav-icon">🥇</span>
-    <span class="nav-text">MostRcrd</span>
+    <span class="nav-icon">🥇</span><span class="nav-text">MostRcrd</span>
   </a>
-
   <a href="summary.html" class="nav-btn">
-    <span class="nav-icon">🏆</span>
-    <span class="nav-text">Summary</span>
+    <span class="nav-icon">🏆</span><span class="nav-text">Summary</span>
   </a>
 </nav>
-<link rel="stylesheet" href="assets/css/footer.css">
-<script src="assets/js/footer.js"></script>
+
+<!-- Loader Overlay -->
+<div id="loaderOverlay">
+  <div class="loader-box">
+    <div class="spinner"></div>
+    <p>Data Loading…</p>
+  </div>
+</div>
 
 <script>
-
-  // Active state based on current page URL
 document.addEventListener("DOMContentLoaded", () => {
-  const navButtons = document.querySelectorAll(".bottom-nav .nav-btn");
-  const currentPage = window.location.pathname.split("/").pop(); // e.g. index.html
+  const btnFunding = document.getElementById("btnFunding");
+  const btnSpending = document.getElementById("btnSpending");
+  const tableFunding = document.getElementById("tableFunding");
+  const tableSpending = document.getElementById("tableSpending");
+  const loaderOverlay = document.getElementById("loaderOverlay");
 
-  navButtons.forEach(btn => {
-    const btnPage = btn.getAttribute("href");
-    if (btnPage === currentPage) {
-      btn.classList.add("active");
-    } else {
+  let activeBtn = null;
+  let activeTable = null;
+
+  function animateTableOpen(table) {
+    table.style.display = "block";
+    table.style.opacity = 0;
+    table.style.maxHeight = "0px";
+    table.style.transition = "opacity 0.4s ease, max-height 0.4s ease";
+    void table.offsetWidth;
+    table.style.opacity = 1;
+    table.style.maxHeight = table.scrollHeight + "px";
+  }
+  function animateTableClose(table) {
+    table.style.opacity = 0;
+    table.style.maxHeight = "0px";
+    setTimeout(() => {
+      table.style.display = "none";
+    }, 400);
+  }
+  function toggleTable(btn, table) {
+    if (activeBtn === btn) {
+      animateTableClose(table);
       btn.classList.remove("active");
+      activeBtn = null;
+      activeTable = null;
+    } else {
+      if (activeTable) {animateTableClose(activeTable);}
+      if (activeBtn) {activeBtn.classList.remove("active");}
+      animateTableOpen(table);
+      btn.classList.add("active");
+      activeBtn = btn;
+      activeTable = table;
     }
-  });
+  }
+
+  btnFunding.addEventListener("click", () => toggleTable(btnFunding, tableFunding));
+  btnSpending.addEventListener("click", () => toggleTable(btnSpending, tableSpending));
+
+  // --- Fetch data with loader ---
+  const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQLtpTaowCE8BCWPocnaYRaDbNRZ285FnSQ8T1XPZR3YUXbnx9KnYr5A1vjS4uH9QaqOFn_sViN8eV7/pub?gid=0&single=true&output=csv";
+  loaderOverlay.style.display = "flex"; // show loader
+
+  fetch(csvUrl)
+    .then(res => res.text())
+    .then(csv => {
+      const rows = csv.split("\n").map(r => r.split(","));
+
+      // Top cards
+      document.getElementById("totalFund").textContent = rows[5][11] || "-"; // L6
+      document.getElementById("totalSpend").textContent = rows[5][14] || "-"; // O6
+      document.getElementById("accountBalance").textContent = rows[6][12] || "-"; // M7
+
+      // Last Month Funding
+      const bodyFunding = document.querySelector("#tableFunding tbody");
+      bodyFunding.innerHTML = "";
+      for (let i = 8; i < rows.length; i++) {
+        if (!rows[i][9]) continue;
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${rows[i][9] || ""}</td>
+          <td>${rows[i][12] || ""}</td>
+          <td>${rows[i][13] || ""}</td>
+          <td>${rows[i][15] || ""}</td>
+        `;
+        bodyFunding.appendChild(tr);
+      }
+
+      // Spending Details
+      const bodySpending = document.querySelector("#tableSpending tbody");
+      bodySpending.innerHTML = "";
+      for (let i = 8; i < rows.length; i++) {
+        if (!rows[i][17]) continue;
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${rows[i][17] || ""}</td>
+          <td>${rows[i][18] || ""}</td>
+          <td>${rows[i][19] || ""}</td>
+          <td>${rows[i][20] || ""}</td>
+        `;
+        bodySpending.appendChild(tr);
+      }
+    })
+    .catch(err => console.error(err))
+    .finally(() => {
+      // hide loader when data loaded or error
+      loaderOverlay.style.display = "none";
+    });
 });
 
+function animateTableOpen(table) {
+  // sabse pehle show + hidden overflow
+  table.style.display = "block";
+  table.style.overflow = "hidden";
+  // initial state
+  table.style.maxHeight = "0px";
+  table.style.opacity = "0";
+  // force reflow
+  void table.offsetWidth;
+  // transition
+  table.style.transition = "max-height 0.6s ease, opacity 0.6s ease";
+  // target state
+  table.style.maxHeight = table.scrollHeight + "px";
+  table.style.opacity = "1";
+  // transition complete hone par height auto kar do
+  setTimeout(() => {
+    table.style.maxHeight = "none";
+    table.style.overflow = "visible";
+  }, 600);
+}
+
+function animateTableClose(table) {
+  // scrollHeight ko fix maxHeight me set karo
+  table.style.overflow = "hidden";
+  table.style.maxHeight = table.scrollHeight + "px";
+  table.style.opacity = "1";
+  // force reflow
+  void table.offsetWidth;
+  // transition to zero
+  table.style.transition = "max-height 0.6s ease, opacity 0.6s ease";
+  table.style.maxHeight = "0px";
+  table.style.opacity = "0";
+  // after animation, display none
+  setTimeout(() => {
+    table.style.display = "none";
+  }, 600);
+}
+
+function toggleTable(btn, table) {
+  if (window.activeBtn === btn) {
+    animateTableClose(table);
+    btn.classList.remove("active");
+    window.activeBtn = null;
+    window.activeTable = null;
+  } else {
+    if (window.activeTable) animateTableClose(window.activeTable);
+    if (window.activeBtn) window.activeBtn.classList.remove("active");
+    animateTableOpen(table);
+    btn.classList.add("active");
+    window.activeBtn = btn;
+    window.activeTable = table;
+  }
+}
+
+
 </script>
-
-
 </body>
 </html>
