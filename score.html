@@ -384,13 +384,14 @@ function closePopups() {
 }
 
 
-  function checkNames(){
-    const b1 = document.getElementById('batsman1').value.trim();
-    const b2 = document.getElementById('batsman2').value.trim();
-    const bow = document.getElementById('bowler').value.trim();
-    if(!b1 || !b2 || !bow){ alert("Please fill the Batsman 1 / Batsman 2 / Bowler"); return false; }
-    return true;
-  }
+  function showCustomAlert(msgHtml){
+  document.getElementById('alertMsg').innerHTML = msgHtml;
+  document.getElementById('customAlert').style.display = 'flex';
+}
+function closeCustomAlert(){
+  document.getElementById('customAlert').style.display = 'none';
+}
+
 
   function rotateStrike(){
     let b1 = document.getElementById('batsman1').value;
@@ -400,17 +401,24 @@ function closePopups() {
   }
 
   // ----- NO popup flow -----
-  function showNoPopup(){
-    if(!checkNames()) return;
-    overlay.style.display='block';
-    document.getElementById('noPopup').style.display='block';
-    // NO popup not mandatory (user can close)
-    document.body.dataset.mandatory = 'false';
+  function checkNames(){
+  const b1 = document.getElementById('batsman1').value.trim();
+  const b2 = document.getElementById('batsman2').value.trim();
+  const bowler = document.getElementById('bowler').value.trim();
+
+  let missing = [];
+  if(!b1) missing.push('<span style="background:#17a2b8;color:#fff;padding:2px 5px;border-radius:3px;">Striker</span>');
+  if(!b2) missing.push('<span style="background:#ffc107;color:#000;padding:2px 5px;border-radius:3px;">Non-Striker</span>');
+  if(!bowler) missing.push('<span style="background:#007bff;color:#fff;padding:2px 5px;border-radius:3px;">Bowler</span>');
+
+  if(missing.length>0){
+    let html = 'Please fill the:<br>' + missing.join('<br>');
+    showCustomAlert(html);
+    return false;
   }
-  function handleNoChoice(code){
-    closePopups();
-    sendRun(code);
-  }
+  return true;
+}
+
 
   // ----- OUT multi-step flow -----
   function startOutFlow(){
@@ -705,6 +713,67 @@ function handleRunClick(el,run){
   setTimeout(()=>el.classList.remove('active'),200); // 0.2 second baad normal ho jaye
 }
 </script>
+
+<!-- custom popup -->
+<div id="customAlert" style="display:none;">
+  <div class="alert-box">
+    <h3 id="alertTitle">Missing Fields</h3>
+    <p id="alertMsg"></p>
+    <button onclick="closeCustomAlert()">OK</button>
+  </div>
+</div>
+
+<style>
+#customAlert {
+  position: fixed;
+  top:0; left:0; right:0; bottom:0;
+  background: rgba(0,0,0,0.5);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.alert-box {
+  background:#fff;
+  padding:10px;
+  border-radius:10px;
+  width:280px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.3);
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start; /* left align sab */
+  gap:6px; /* har cheez ke beech 6px */
+}
+
+.alert-box h3 {
+  margin:0;
+  font-size:20px;
+  font-weight:700;
+  padding-left:3px; /* left gap */
+}
+
+.alert-box p {
+  margin:0;
+  font-size:14px;
+  font-weight: 450;
+  line-height:2;
+  padding-left:3px; /* left gap */
+}
+
+.alert-box button {
+  align-self:center; /* button right side par */
+  background:#039591;
+  color:#fff;
+  border:none;
+  padding:6px 30px;
+  border-radius:5px;
+  cursor:pointer;
+  margin-top:4px;
+}
+
+</style>
+
 
 </body>
 </html>
