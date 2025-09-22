@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CTCT Weekly Series Ranking</title>
-  <link rel="stylesheet" href="assets/css/footer.css">
-  <style>
-/* BLOCK: GLOBAL BODY STYLES */
+<title>CTCT Weekly Series Ranking - Score Entry</title>
+<link rel="stylesheet" href="assets/css/footer.css">
+<style>
+/* GLOBAL */
 body {
-  font-family: 'Noto Nastaliq Urdu', 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-  background: #f7fbfb;
-  color: #333;
-  padding-bottom: 80px; /* space for nav bar */
+  font-family: 'Noto Nastaliq Urdu','Arial',sans-serif;
+  margin:0;
+  padding:0;
+  background:#f7fbfb;
+  color:#333;
+  padding-bottom:80px;
 }
 
-/* BLOCK: HEADER STYLES */
+/* HEADER */
 header {
   background: linear-gradient(90deg,#039591,#ffb703);
   color: white;
@@ -31,59 +31,7 @@ header {
   box-shadow: 0 3px 10px rgba(0,0,0,0.25);
 }
 
-/* MAIN SECTION */
-.main-section {
-  min-height: calc(10vh - 150px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 50px;
-}
-
-.card {
-  background: #028782;   /* ✅ naya green bg */
-  border-radius: 20px;
-  padding: 40px 25px;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-  animation: fadeIn 1.2s ease;
-  color: #ffffff;        /* ✅ text white */
-}
-
-.card h2 {
-  font-size: 1.6rem;
-  margin-bottom: 15px;
-  color: #ffffff;        /* ✅ heading bhi white */
-}
-
-.card p {
-  font-size: 1rem;
-  line-height: 1.8;
-  color: #ffffff;        /* ✅ paragraph bhi white */
-}
-
-
-.icon {
-  font-size: 3rem;
-  margin-bottom: 10px;
-  color: #ffb703;
-  animation: bounce 1.5s infinite;
-}
-
-@keyframes bounce {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-
-/* Bottom nav */
+/* BOTTOM NAV */
 .bottom-nav {
   position: fixed;
   bottom: 0;
@@ -98,7 +46,6 @@ header {
   z-index: 999;
   padding: 5px 0;
 }
-
 .nav-btn {
   flex: 1;
   margin: 0 5px;
@@ -115,12 +62,10 @@ header {
   padding: 6px 4px;
   transition: all 0.2s ease;
 }
-
 .nav-btn:hover {
   transform: translateY(-4px);
   box-shadow: 0 6px 10px rgba(0,0,0,0.4), inset 0 -2px 4px rgba(255,255,255,0.2);
 }
-
 .nav-btn.active {
   background: linear-gradient(145deg, #ffb703, #e09a00);
   color: #222;
@@ -128,86 +73,615 @@ header {
   transform: translateY(2px);
   box-shadow: inset 0 3px 6px rgba(0,0,0,0.5);
 }
+.nav-icon {font-size:1.5rem;margin-bottom:2px;}
+.nav-text {font-size:0.75rem;font-weight:600;}
 
-.nav-icon {
-  font-size: 1.5rem;
-  margin-bottom: 2px;
+/* SCORE ENTRY SECTION */
+h2 {
+  text-align:center;
+  margin-top:15px;
+  margin-bottom:10px;
+}
+input {
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-size:16px;
+}
+.scoreboard {
+  background:#aaeeff;
+  border-radius:10px;
+  padding:10px;
+  margin:10px auto;
+  max-width:400px;
+  font-size:20px;
+  font-weight:500;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+.numpad {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  max-width:400px;
+  margin:10px auto;
+  background:#fff;
+  padding:10px;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+.btn {
+  background:#039591;
+  color:#fff;
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  font-size:25px;
+  font-weight:600;
+  box-shadow:0 3px #02726d;
+  cursor:pointer;
+}
+.btn:active {box-shadow:none;transform:translateY(2px);}
+.btn-no {background:#ffb703;color:#000;}
+.btn-wd {background:purple;color:#fff;}
+.btn-out {background:red;color:#ffffff;}
+.actions {
+  display:flex;
+  gap:10px;
+  margin:10px auto;
+  max-width:400px;
+  background:#fff;
+  padding:10px;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+.actions button {
+  flex:1;
+  padding:10px 15px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+.undo {background:#03a9f4; color:#fff;}
+.clear {background:#f55;color:#fff;}
+.rotate {background:#03a9f4;color:#fff;}
+
+/* POPUPS */
+.popup {
+  display:none;
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 0 10px rgba(0,0,0,0.3);
+  z-index:100;
+  min-width:240px;
+}
+.popup h3 {margin:0 0 8px 0;}
+.popup button {
+  margin:5px;
+  padding:10px;
+  background:#ffb703;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+.overlay {
+  display:none;
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,0.5);
+  z-index:99;
 }
 
-.nav-text {
-  font-size: 0.75rem;
-  font-weight: 600;
+/* INPUT LABELS */
+.input-box {
+  position:relative;
+  display:inline-block;
+  width:100%;
+  margin-bottom:8px;
+  max-width:400px;
 }
-
-body {
-  padding-bottom: 80px;
+.input-box input {
+  width:100%;
+  padding:10px 10px 10px 85px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:16px;
+  box-sizing:border-box;
 }
-
+.inner-label {
+  position:absolute;
+  top:0;left:0;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:75px;
+  border-top-left-radius:8px;
+  border-bottom-left-radius:8px;
+  color:#fff;
+  font-size:13px;
+}
+.inner-label.striker {background:#039591;}
+.inner-label.nonstriker {background:#ffb703;color:#000;}
+.inner-label.bowler {background:#03a9f4;}
 </style>
 
+<style>
 
+.btn.active{
+  background:#e09a00 ;
+  color:#000;
+}
+</style>
 
 </head>
 <body>
- 
-<!-- HEADER -->
+
 <header>Entry Score Board</header>
 
-<!-- MAIN CONTENT -->
-<main class="main-section">
-  <div class="card">
-    <div class="icon">🚧</div>
-    <h3>سکور بورڈ زیر تعمیر ہے</h3>
-    <p>
-      یہ حصہ ابھی تیاری کے مراحل میں ہے۔  
-      ان شاء اللہ بہت جلد یہ مکمل ہو کر آپ کے سامنے پیش کیا جائے گا۔  
-      ہم اس پر کام کر رہے ہیں تاکہ آپ کو بہترین معلومات اور تجربہ فراہم کیا جا سکے۔  
-      براہ کرم کچھ دن انتظار کریں۔ 
+<h6> </h6>
 
-      <br>😊</br>
-    </p>
+<div class="inputs" style="max-width:400px;margin:0 auto;">
+  <div class="input-box">
+    <span class="inner-label striker">Striker</span>
+    <input id="batsman1" placeholder="Batsman 1">
   </div>
-</main>
+  <div class="input-box">
+    <span class="inner-label nonstriker">Non-Striker</span>
+    <input id="batsman2" placeholder="Batsman 2">
+  </div>
+  <div class="input-box">
+    <span class="inner-label bowler">Bowler</span>
+    <input id="bowler" placeholder="Bowler">
+  </div>
+</div>
 
+<div class="scoreboard">
+  <div>Total Score: <span id="totalScore">0</span></div>
+  <div>Total Overs: <span id="totalOvers">0</span></div>
+</div>
 
+<div class="numpad">
+  <button class="btn" onclick="handleRunClick(this,'0')">0</button>
+  <button class="btn" onclick="handleRunClick(this,'1')">1</button>
+  <button class="btn" onclick="handleRunClick(this,'2')">2</button>
+  <button class="btn" onclick="handleRunClick(this,'3')">3</button>
+  <button class="btn" onclick="handleRunClick(this,'4')">4</button>
+  <button class="btn" onclick="handleRunClick(this,'6')">6</button>
+  <button class="btn btn-no" onclick="showNoPopup()">NO</button>
+  <button class="btn btn-wd" onclick="sendRun('WD')">WD</button>
+  <button class="btn btn-out" onclick="startOutFlow()">OUT</button>
+</div>
 
+<div class="actions">
+  <button class="undo" onclick="undoLast()">Undo</button>
+  <button class="clear" onclick="clearAll()">Clear All</button>
+  <button class="rotate" onclick="rotateStrike()">Rotate Strike</button>
+</div>
 
-  
+<!-- overlay & popups -->
+<div class="overlay" id="overlay"></div>
+
+<div class="popup" id="noPopup">
+  <h3>No Ball Options</h3>
+  <div class="input-inline">
+    <button onclick="handleNoChoice('NO')">No</button>
+    <button onclick="handleNoChoice('N1')">N1</button>
+    <button onclick="handleNoChoice('N2')">N2</button>
+    <button onclick="handleNoChoice('N3')">N3</button>
+    <button onclick="handleNoChoice('N4')">N4</button>
+    <button onclick="handleNoChoice('N6')">N6</button>
+  </div>
+</div>
+
+<!-- OUT: who is out -->
+<div class="popup" id="whoOutPopup">
+  <h3>Who is out?</h3>
+  <div class="input-inline">
+    <button id="whoOutBtn1" onclick="selectWhoOut(1)"></button>
+    <button id="whoOutBtn2" onclick="selectWhoOut(2)"></button>
+  </div>
+</div>
+
+<!-- OUT: type -->
+<div class="popup" id="outTypePopup">
+  <h3>Select Out Type</h3>
+  <div class="input-inline">
+    <button onclick="selectOutType('Bowled')">Bowled</button>
+    <button onclick="selectOutType('Catch')">Catch</button>
+    <button onclick="selectOutType('Run Out')">Run Out</button>
+  </div>
+</div>
+
+<!-- Next batsman -->
+<div class="popup" id="nextBatsmanPopup">
+  <h3 class="muted">Enter next batsman (required)</h3>
+  <input id="nextBatsmanName" placeholder="Next batsman">
+  <div style="margin-top:8px"><button onclick="confirmNextBatsman()">OK</button></div>
+</div>
+
+<!-- Next bowler -->
+<div class="popup" id="nextBowlerPopup">
+  <h3 class="muted">Enter next bowler (required)</h3>
+  <input id="nextBowlerName" placeholder="Next bowler">
+  <div style="margin-top:8px"><button onclick="confirmNextBowler()">OK</button></div>
+</div>
+
+<!-- Bottom nav -->
 <nav class="bottom-nav" role="navigation" aria-label="Primary">
   <a href="index.html" class="nav-btn">
     <span class="nav-icon">🏠</span>
     <span class="nav-text">Home</span>
   </a>
-
   <a href="score.html" class="nav-btn">
     <span class="nav-icon">📋</span>
     <span class="nav-text">ScoreBrd</span>
   </a>
-
   <a href="live.html" class="nav-btn">
     <span class="nav-icon">🔴</span>
     <span class="nav-text">LiveBrd</span>
   </a>
-
   <a href="most.html" class="nav-btn">
     <span class="nav-icon">🥇</span>
     <span class="nav-text">MostRcrd</span>
   </a>
-
   <a href="summary.html" class="nav-btn">
     <span class="nav-icon">🏆</span>
     <span class="nav-text">Summary</span>
   </a>
 </nav>
-<link rel="stylesheet" href="assets/css/footer.css">
 
 <script>
+ // ====== CONFIG: replace with your deployed web app URL ======
+  const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOOz4V_7hBXicLOvzwM8wCyvvAbIeN79Q9FYP7v2qDfgg2Wk_DpeIgZ3EfCuKid3oSxg/exec";
+  // ===========================================================
 
-// Active state based on current page URL
+  let totalScore = 0, totalBalls = 0;
+  let history = [];
+
+  // For OUT flow
+  let outFlow = {
+    active: false,
+    whoIndex: null,      // 1 or 2
+    outType: null,
+    wasLastBall: false,
+    pendingEvent: null,
+    victimName: null
+  };
+
+  // nextBowlerContext: 'over_end' or 'out' or '' (none)
+  let nextBowlerContext = '';
+
+// overlay click: only close if not mandatory
+const overlay = document.getElementById('overlay');
+overlay.addEventListener('click', function () {
+  if (document.body.dataset.mandatory === 'true') return;
+  closePopups();
+});
+
+function closePopups() {
+  document.querySelectorAll('.popup').forEach(p => p.style.display = 'none');
+  overlay.style.display = 'none';
+  document.body.dataset.mandatory = 'false';
+  nextBowlerContext = '';
+
+  // reset outFlow agar half state me ho aur mandatory na ho
+  if (outFlow.active && !outFlow.pendingEvent) {
+    outFlow = {
+      active: false,
+      whoIndex: null,
+      outType: null,
+      wasLastBall: false,
+      pendingEvent: null,
+      victimName: null
+    };
+  }
+}
+
+
+  function checkNames(){
+    const b1 = document.getElementById('batsman1').value.trim();
+    const b2 = document.getElementById('batsman2').value.trim();
+    const bow = document.getElementById('bowler').value.trim();
+    if(!b1 || !b2 || !bow){ alert("Please fill the Batsman 1 / Batsman 2 / Bowler"); return false; }
+    return true;
+  }
+
+  function rotateStrike(){
+    let b1 = document.getElementById('batsman1').value;
+    let b2 = document.getElementById('batsman2').value;
+    document.getElementById('batsman1').value = b2;
+    document.getElementById('batsman2').value = b1;
+  }
+
+  // ----- NO popup flow -----
+  function showNoPopup(){
+    if(!checkNames()) return;
+    overlay.style.display='block';
+    document.getElementById('noPopup').style.display='block';
+    // NO popup not mandatory (user can close)
+    document.body.dataset.mandatory = 'false';
+  }
+  function handleNoChoice(code){
+    closePopups();
+    sendRun(code);
+  }
+
+  // ----- OUT multi-step flow -----
+  function startOutFlow(){
+    if(!checkNames()) return;
+    // prepare who-out popup with current names and store victim later
+    document.getElementById('whoOutBtn1').textContent = document.getElementById('batsman1').value || 'Batsman1';
+    document.getElementById('whoOutBtn2').textContent = document.getElementById('batsman2').value || 'Batsman2';
+    overlay.style.display = 'block';
+    document.getElementById('whoOutPopup').style.display = 'block';
+    outFlow.active = true;
+    outFlow.whoIndex = null;
+    outFlow.outType = null;
+    outFlow.pendingEvent = null;
+    outFlow.wasLastBall = false;
+    outFlow.victimName = null;
+    document.body.dataset.mandatory = 'false';
+  }
+
+  function selectWhoOut(idx){
+    outFlow.whoIndex = idx; // 1 or 2
+    // save victim name immediately
+    outFlow.victimName = (idx===1) ? document.getElementById('batsman1').value : document.getElementById('batsman2').value;
+    // now ask out type
+    document.getElementById('whoOutPopup').style.display = 'none';
+    document.getElementById('outTypePopup').style.display = 'block';
+  }
+
+  function selectOutType(type){
+    outFlow.outType = type;
+    // determine if this ball will be last ball of over AFTER counting the ball:
+    let hypotheticalTotalBalls = totalBalls + 1;
+    let ballsInCurrentOverAfter = hypotheticalTotalBalls % 6;
+    outFlow.wasLastBall = (ballsInCurrentOverAfter === 0);
+
+    // hide out type popup and force next batsman input (mandatory)
+    document.getElementById('outTypePopup').style.display = 'none';
+    overlay.style.display = 'block';
+    document.getElementById('nextBatsmanPopup').style.display = 'block';
+    // make mandatory so user cannot click outside to cancel
+    document.body.dataset.mandatory = 'true';
+
+    // keep outFlow active; context stays for confirm flow
+    nextBowlerContext = ''; // not yet
+  }
+
+  function confirmNextBatsman(){
+    const name = document.getElementById('nextBatsmanName').value.trim();
+    if(!name){
+      alert("Please enter next batsman name (required)");
+      return;
+    }
+    // replace the out batsman in UI with new name
+    if(outFlow.whoIndex === 1){
+      document.getElementById('batsman1').value = name;
+    } else {
+      document.getElementById('batsman2').value = name;
+    }
+    document.getElementById('nextBatsmanName').value = '';
+    document.getElementById('nextBatsmanPopup').style.display = 'none';
+
+    // if last-ball-out, require next bowler (mandatory)
+    if(outFlow.wasLastBall){
+      document.getElementById('nextBowlerPopup').style.display = 'block';
+      // keep mandatory true and mark context as out
+      document.body.dataset.mandatory = 'true';
+      nextBowlerContext = 'out';
+    } else {
+      // not last ball, we can finalize the out event now
+      finalizeOutEvent();
+      document.body.dataset.mandatory = 'false';
+      nextBowlerContext = '';
+    }
+  }
+
+  function confirmNextBowler(){
+    const name = document.getElementById('nextBowlerName').value.trim();
+    if(!name){
+      alert("Please enter next bowler name (required)");
+      return;
+    }
+    // set the new bowler
+    document.getElementById('bowler').value = name;
+    document.getElementById('nextBowlerName').value = '';
+
+    // decide behavior depending on why popup opened
+    if(nextBowlerContext === 'out'){
+      // this popup was because of last-ball OUT: finalize OUT event now
+      document.getElementById('nextBowlerPopup').style.display = 'none';
+      finalizeOutEvent();
+      document.body.dataset.mandatory = 'false';
+      nextBowlerContext = '';
+    } else {
+      // normal over-end flow: just close and continue (do NOT finalize or change ball count)
+      document.getElementById('nextBowlerPopup').style.display = 'none';
+      document.body.dataset.mandatory = 'false';
+      nextBowlerContext = '';
+      closePopups();
+    }
+  }
+
+  function finalizeOutEvent(){
+    // Use stored victimName (saved earlier)
+    const victim = outFlow.victimName || ("Batsman" + outFlow.whoIndex);
+    const eventLabel = "OUT:" + outFlow.outType + " (" + victim + ")";
+
+    // Outs are legal balls: runs=0, ball+1
+    const runsToAdd = 0;
+    const ballAdd = 1;
+    const isLegalBall = true;
+
+    totalScore += runsToAdd;
+    totalBalls += ballAdd;
+    updateScore();
+
+    // push history
+    history.push({run: eventLabel, runs: runsToAdd, balls: ballAdd});
+
+    // send to sheet
+    const bowler = document.getElementById('bowler').value;
+    const striker = document.getElementById('batsman1').value;
+    sendToSheetRaw({ action: 'append', bowler: bowler, eventLabel: eventLabel, striker: striker });
+
+    // handle strike rotation same as other legal balls
+    handleStrikeRotationForRunString("0", isLegalBall);
+
+    // after finalize, reset outFlow
+    outFlow = { active:false, whoIndex:null, outType:null, wasLastBall:false, pendingEvent:null, victimName:null };
+
+    closePopups();
+  }
+
+  // ----- Generic run handling -----
+  function sendRun(run){
+    if(!checkNames()) return;
+    // if an OUT flow is active and mandatory, disallow normal runs
+    if(outFlow.active && document.body.dataset.mandatory === 'true'){
+      alert("Please complete the OUT flow first.");
+      return;
+    }
+
+    closePopups();
+
+    // compute runs/balls/isLegalBall
+    let runsToAdd = 0, ballAdd = 0, isLegalBall = false;
+
+    if(!isNaN(run)){ // 0,1,2,3,4,6
+      runsToAdd = parseInt(run); ballAdd = 1; isLegalBall = true;
+    } else if(run === 'WD'){
+      runsToAdd = 1; ballAdd = 0; isLegalBall = false;
+    } else if(run === 'NO'){
+      runsToAdd = 1; ballAdd = 0; isLegalBall = false;
+    } else if(run.startsWith('N')){
+      // N1,N2...
+      let add = parseInt(run[1]);
+      runsToAdd = 1 + (isNaN(add) ? 0 : add);
+      ballAdd = 0; isLegalBall = false;
+    } else {
+      // unknown label -> treat as legal single (fallback)
+      runsToAdd = 0; ballAdd = 1; isLegalBall = true;
+    }
+
+    // apply immediately for normal runs / wides / no-balls
+    totalScore += runsToAdd;
+    totalBalls += ballAdd;
+    updateScore();
+
+    history.push({run: run, runs: runsToAdd, balls: ballAdd});
+
+    // send to sheet immediately
+    sendToSheetRaw({ action: 'append', bowler: document.getElementById('bowler').value, eventLabel: run, striker: document.getElementById('batsman1').value });
+
+    // strike rotation (legal balls only)
+    handleStrikeRotationForRunString(run, isLegalBall);
+  }
+
+  function handleStrikeRotationForRunString(run, isLegalBall){
+    // illegal ball par normally kuch nahi
+    if(!isLegalBall){
+      // exception: N1 and N3 rotate strike
+      if(run === 'N1' || run === 'N3'){
+        rotateStrike();
+      }
+      return;
+    }
+
+    let ballsInCurrentOver = totalBalls % 6;
+
+    const isOddRun = (run === '1' || run === '3');
+    const isEvenRun = (run === '2' || run === '4' || run === '6' || run === '0');
+
+    if(ballsInCurrentOver === 0){
+      // last ball completed
+      if(isEvenRun) rotateStrike();
+
+      // show next bowler popup and MAKE IT mandatory (because we want the user to confirm)
+      overlay.style.display = 'block';
+      document.getElementById('nextBowlerPopup').style.display = 'block';
+      document.body.dataset.mandatory = 'true';
+
+      // mark context as normal over-end (not an OUT flow)
+      nextBowlerContext = 'over_end';
+    } else {
+      if(isOddRun) rotateStrike();
+    }
+  }
+
+
+  // ----- send to sheet helper (no CORS proxy) -----
+ function sendToSheetRaw(payload){
+  fetch(APP_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  }).then(() => {
+    console.log('Sent to sheet');
+  }).catch(err => console.error(err));
+}
+
+
+  // ----- next bowler / batsman set functions for non-OUT cases -----
+  function setNextBowler(){
+    const name = document.getElementById('nextBowlerName').value.trim();
+    if(name) document.getElementById('bowler').value = name;
+    document.getElementById('nextBowlerName').value = '';
+    closePopups();
+  }
+  function setNextBatsman(){
+    const name = document.getElementById('nextBatsmanName').value.trim();
+    if(name) document.getElementById('batsman1').value = name;
+    document.getElementById('nextBatsmanName').value = '';
+    closePopups();
+  }
+
+  // ----- Undo / Clear -----
+  function undoLast(){
+    const last = history.pop();
+    if(!last){ alert("Nothing to undo"); return; }
+    totalScore -= last.runs;
+    totalBalls -= last.balls;
+    if(totalScore < 0) totalScore = 0;
+    if(totalBalls < 0) totalBalls = 0;
+    updateScore();
+    // tell sheet to undo (your Apps Script should handle action:"undo")
+    sendToSheetRaw({ action: 'undo' });
+  }
+
+  function clearAll(){
+    totalScore = 0; totalBalls = 0; history = [];
+    updateScore();
+    document.getElementById('batsman1').value = '';
+    document.getElementById('batsman2').value = '';
+    document.getElementById('bowler').value = '';
+    sendToSheetRaw({ action: 'match_end' });
+  }
+
+  // ----- score UI -----
+  function updateScore(){
+    document.getElementById('totalScore').textContent = totalScore;
+    document.getElementById('totalOvers').textContent = (Math.floor(totalBalls/6) + "." + (totalBalls%6));
+  }
+
+</script>
+
+<script>
+// nav active state
 document.addEventListener("DOMContentLoaded", () => {
   const navButtons = document.querySelectorAll(".bottom-nav .nav-btn");
-  const currentPage = window.location.pathname.split("/").pop(); // e.g. index.html
-
+  const currentPage = window.location.pathname.split("/").pop();
   navButtons.forEach(btn => {
     const btnPage = btn.getAttribute("href");
     if (btnPage === currentPage) {
@@ -217,8 +691,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
-
 </script>
+
+
+
+<script>
+function handleRunClick(el,run){
+  // tumhara existing function call
+  sendRun(run);
+
+  // click effect
+  el.classList.add('active');
+  setTimeout(()=>el.classList.remove('active'),200); // 0.2 second baad normal ho jaye
+}
+</script>
+
 </body>
 </html>
