@@ -384,23 +384,6 @@ function closePopups() {
 }
 
 
-  function showCustomAlert(msgHtml){
-  document.getElementById('alertMsg').innerHTML = msgHtml;
-  document.getElementById('customAlert').style.display = 'flex';
-}
-function closeCustomAlert(){
-  document.getElementById('customAlert').style.display = 'none';
-}
-
-
-  function rotateStrike(){
-    let b1 = document.getElementById('batsman1').value;
-    let b2 = document.getElementById('batsman2').value;
-    document.getElementById('batsman1').value = b2;
-    document.getElementById('batsman2').value = b1;
-  }
-
-  // ----- NO popup flow -----
   function checkNames(){
   const b1 = document.getElementById('batsman1').value.trim();
   const b2 = document.getElementById('batsman2').value.trim();
@@ -419,6 +402,34 @@ function closeCustomAlert(){
   return true;
 }
 
+function showCustomAlert(msgHtml){
+  document.getElementById('alertMsg').innerHTML = msgHtml;
+  document.getElementById('customAlert').style.display = 'flex';
+}
+function closeCustomAlert(){
+  document.getElementById('customAlert').style.display = 'none';
+}
+
+
+  function rotateStrike(){
+    let b1 = document.getElementById('batsman1').value;
+    let b2 = document.getElementById('batsman2').value;
+    document.getElementById('batsman1').value = b2;
+    document.getElementById('batsman2').value = b1;
+  }
+
+  // ----- NO popup flow -----
+  function showNoPopup(){
+    if(!checkNames()) return;
+    overlay.style.display='block';
+    document.getElementById('noPopup').style.display='block';
+    // NO popup not mandatory (user can close)
+    document.body.dataset.mandatory = 'false';
+  }
+  function handleNoChoice(code){
+    closePopups();
+    sendRun(code);
+  }
 
   // ----- OUT multi-step flow -----
   function startOutFlow(){
@@ -714,6 +725,7 @@ function handleRunClick(el,run){
 }
 </script>
 
+
 <!-- custom popup -->
 <div id="customAlert" style="display:none;">
   <div class="alert-box">
@@ -749,16 +761,16 @@ function handleRunClick(el,run){
 .alert-box h3 {
   margin:0;
   font-size:20px;
-  font-weight:700;
-  padding-left:3px; /* left gap */
+  font-weight:600;
+  padding-left:5px; /* left gap */
 }
 
 .alert-box p {
   margin:0;
-  font-size:14px;
+  font-size:16px;
   font-weight: 450;
   line-height:2;
-  padding-left:3px; /* left gap */
+  padding-left:5px; /* left gap */
 }
 
 .alert-box button {
@@ -773,7 +785,6 @@ function handleRunClick(el,run){
 }
 
 </style>
-
 
 </body>
 </html>
